@@ -1,22 +1,8 @@
-'''
-https://discordapp.com/oauth2/authorize?&client_id=855554239991906335&scope=bot&permissions=67584
-
-https://stackoverflow.com/questions/55012726/discord-py-unable-to-get-certificate
-
-Install Certificates.command
-
-'''
 
 import discord
 from discord.ext import commands
+from config import settings
 
-
-settings = {
-    'token': 'ODU1NTU0MjM5OTkxOTA2MzM1.YM0K-g.54Oh2uTawJ85Iu5IGJQZhV6F8JE',
-    'bot': 'важный хуй',
-    'id': 855554239991906335,
-    'prefix': '::'
-}
 
 def get_name(ctx):
     #author = ctx.message.author 
