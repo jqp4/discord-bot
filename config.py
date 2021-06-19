@@ -4,6 +4,7 @@ https://stackoverflow.com/questions/55012726/discord-py-unable-to-get-certificat
 Install Certificates.command
 
 
+https://discordpy.readthedocs.io/en/stable/ext/commands/commands.html
 https://discord.com/developers/applications
 https://habr.com/ru/post/494600/
 https://habr.com/ru/post/511454/

@@ -3,6 +3,8 @@ import discord
 from discord.ext import commands
 from config import settings
 
+bot = commands.Bot(command_prefix = settings['prefix'])
+
 
 def get_name(ctx):
     #author = ctx.message.author 
@@ -10,10 +12,14 @@ def get_name(ctx):
     return str(ctx.message.author)[:-5]
 
 
-bot = commands.Bot(command_prefix = settings['prefix'])
 
-@bot.command() # Не передаём аргумент pass_context, так как он был нужен в старых версиях.
+@bot.command()
+async def hello(ctx): # Создаём функцию и передаём аргумент ctx.
+    author = ctx.message.author # Объявляем переменную author и записываем туда информацию об авторе.
+    await ctx.send(f'Hello, {author.mention}!') # Выводим сообщение с упоминанием автора, обращаясь к переменной author.
 
+
+@bot.command()
 async def hello_(ctx): 
     author = ctx.message.author 
     name = str(author)[:-5]
@@ -26,18 +32,15 @@ async def hello_(ctx):
     else:
         await ctx.send(f'прив, {author.mention}')
 
-@bot.command()
-async def hello(ctx): # Создаём функцию и передаём аргумент ctx.
-    author = ctx.message.author # Объявляем переменную author и записываем туда информацию об авторе.
-    await ctx.send(f'Hello, {author.mention}!') # Выводим сообщение с упоминанием автора, обращаясь к переменной author.
+
 
 
 @bot.command()
-async def test(ctx, *args):
+async def test_args(ctx, *args):
     await ctx.send('{} arguments: {}'.format(len(args), ', '.join(args)))
 
-@bot.command()
-async def test2(ctx, *, arg):
+@bot.command(name='say')
+async def test(ctx, *, arg):
     await ctx.send(arg)
 
 
