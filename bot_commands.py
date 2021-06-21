@@ -1,10 +1,13 @@
 
 import discord
 from discord.ext import commands
+from googletrans import Translator
 from config import Settings
 from random import randint
 
+
 settings = Settings()
+translator = Translator()
 
 bot = commands.Bot(command_prefix = settings.prefix)
 
@@ -141,7 +144,7 @@ async def d12391dwibe4g02v(ctx, *args):
     field_key = f'{settings.cmd_key}field'
     text_key = f'{settings.cmd_key}text'
     LF_key = '\\n'
-    if args[0] in ['help', '-help', '--help', '--h']:
+    if args[0] in settings.help_keys:
         msg = f'```{settings.prefix}embed <title>\n{descr_key} <description, optional>\n\tBlocks of text, optional:\n{field_key} <field name>\n{text_key} <text>\n\t*Use {LF_key} to line feed.```'
         await ctx.send(msg)
     else:
@@ -155,15 +158,6 @@ async def d12391dwibe4g02v(ctx, *args):
 
         if i < N and args[i] == descr_key:
             descr = ''
-            #i += 1
-            #while i < N and args[i] != field_key:
-            #    descr += f'{args[i]} '
-            #    i += 1
-
-
-
-
-
             i += 1
             while i < N and args[i] != field_key:
                 s = args[i]
@@ -176,12 +170,6 @@ async def d12391dwibe4g02v(ctx, *args):
                 i += 1
             embed = discord.Embed(title=title, description=descr, color=settings.color)
         
-
-
-
-
-
-        #i += 1
         while i < N:
             field_name = ''
             text = ''
@@ -198,18 +186,15 @@ async def d12391dwibe4g02v(ctx, *args):
                     if LF_key in s:   
                         x = s.find(LF_key)
                         st = s[x+len(LF_key):]
-
                         #s = f'{s[:x]}\n'
                         #if len(st):
                         #    s = f'{s}{st} '
-
                         text += f'{s[:x]}\n{st} ' if len(st) else f'{s[:x]}\n'
                     else:
                         text += f'{s} '
                     i += 1
 
-            #embed.add_field(name=field_name, value=text, inline=False)
-            embed.add_field(name='\n', value=text, inline=False)
+            embed.add_field(name=field_name, value=text, inline=False)
 
         await ctx.send(embed=embed)
 
@@ -232,5 +217,13 @@ async def wewjbvqlibwev(ctx):
     embed.add_field(name='Users Command', value='`!kick`>>Kick the user from server.',  inline=False)
 
     await ctx.send(embed=embed)
+
+
+@bot.command(aliases=["tl", "tr", "translate"])
+async def translate_jebrvwev(ctx, lang, *, text):
+    #translator = Translator()
+    translation = translator.translate(text, dest=lang)
+    await ctx.send(translation.text)
+
 
 

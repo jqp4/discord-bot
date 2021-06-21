@@ -9,7 +9,7 @@ settings = Settings()
 
 #print(settings.invite_link())
 
-print('\n'*42)
+print('\n'*43)
 
 bot.run(settings.token)
 

@@ -12,6 +12,8 @@ https://habr.com/ru/post/511454/
 
 color https://www.w3schools.com/colors/colors_picker.asp
 
+translator pip install googletrans==3.1.0a0
+
 '''
 
 
@@ -43,6 +45,7 @@ class Settings:
         self.color = 0xff6699
         #invite_link = f'https://discordapp.com/oauth2/authorize?&client_id={app_id}&scope=bot&permissions={rights}'
         #bot_name = 'важный хуй'
+        self.help_keys = ['help', '-help', '--help', '--h']
 
     def invite_link(self, r=None):
         #if not r:
