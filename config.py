@@ -39,6 +39,7 @@ class Settings:
         self.app_id = 856558869333671966
         self.rights = 335629377
         self.prefix = '::'
+        self.cmd_key = '--'
         self.color = 0xff6699
         #invite_link = f'https://discordapp.com/oauth2/authorize?&client_id={app_id}&scope=bot&permissions={rights}'
         #bot_name = 'важный хуй'
