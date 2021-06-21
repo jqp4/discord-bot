@@ -155,36 +155,61 @@ async def d12391dwibe4g02v(ctx, *args):
 
         if i < N and args[i] == descr_key:
             descr = ''
+            #i += 1
+            #while i < N and args[i] != field_key:
+            #    descr += f'{args[i]} '
+            #    i += 1
+
+
+
+
+
             i += 1
-            while i < N and args[i] != field_key:
-                descr += f'{args[i]} '
-                i += 1
-            embed = discord.Embed(title=title, description=descr, color=settings.color)
-        
-        i += 1
-        while i < N:
-            field_name = ''
-            while i < N and args[i] != text_key:
-                field_name += f'{args[i]} '
-                i += 1
-            i += 1
-            text = ''
             while i < N and args[i] != field_key:
                 s = args[i]
                 if LF_key in s:   
                     x = s.find(LF_key)
                     st = s[x+len(LF_key):]
-
-                    #s = f'{s[:x]}\n'
-                    #if len(st):
-                    #    s = f'{s}{st} '
-
-                    text += f'{s[:x]}\n{st} ' if len(st) else f'{s[:x]}\n'
+                    descr += f'{s[:x]}\n{st} ' if len(st) else f'{s[:x]}\n'
                 else:
-                    text += f'{s} '
+                    descr += f'{s} '
                 i += 1
-            i += 1
-            embed.add_field(name=field_name, value=text, inline=False)
+            embed = discord.Embed(title=title, description=descr, color=settings.color)
+        
+
+
+
+
+
+        #i += 1
+        while i < N:
+            field_name = ''
+            text = ''
+
+            if args[i] == field_key:
+                i += 1
+                while i < N and args[i] != text_key:
+                    field_name += f'{args[i]} '
+                    i += 1
+            if args[i] == text_key:
+                i += 1
+                while i < N and args[i] != field_key:
+                    s = args[i]
+                    if LF_key in s:   
+                        x = s.find(LF_key)
+                        st = s[x+len(LF_key):]
+
+                        #s = f'{s[:x]}\n'
+                        #if len(st):
+                        #    s = f'{s}{st} '
+
+                        text += f'{s[:x]}\n{st} ' if len(st) else f'{s[:x]}\n'
+                    else:
+                        text += f'{s} '
+                    i += 1
+
+            #embed.add_field(name=field_name, value=text, inline=False)
+            embed.add_field(name='\n', value=text, inline=False)
 
         await ctx.send(embed=embed)
 
