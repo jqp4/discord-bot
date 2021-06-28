@@ -1,16 +1,16 @@
 
 import discord
 from discord.ext import commands
-from config import Settings
+from config import Config
 from bot_commands import bot
 
 
-settings = Settings()
+config = Config()
 
-#print(settings.invite_link())
 
-print('\n'*43)
+print('\n'*42)
+print(config.invite_link())
 
-bot.run(settings.token)
+bot.run(config.token)
 
 
