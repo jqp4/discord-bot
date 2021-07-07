@@ -6,8 +6,12 @@ from settings import Settings
 import json
 import requests
 import datetime
+import numpy as np
 from random import randint
+from colour import hex2hsl, hsl2rgb
 from googletrans import Translator
+import matplotlib.pyplot as plt
+
 
 
 settings = Settings()
@@ -21,18 +25,9 @@ bot = commands.Bot(command_prefix = settings.prefix)
 
 
 
-@bot.command()
-async def hello(ctx): 
-    author = ctx.message.author 
-    name = str(author)[:-5]
-    #print(author, name)
-    prio = ['PopkaMorzha', 'анти-дрейн', 'Kellon']
-    if name in prio:
-        await ctx.send(f'{author.mention} скинь жопу')
-    elif name == 'Glelg':
-        await ctx.send(f'{author.mention} люблю тебя <3')
-    else:
-        await ctx.send(f'прив, {author.mention}')
+
+
+
 
 
 @bot.command(name='createrole')
@@ -49,14 +44,21 @@ async def createrole(ctx, *, content):
 
 
 @bot.command()
-async def show_roles_id(ctx):
+async def roles_old(ctx, *keys):
+    fid = '-id' in keys
+    fperm = '-perm' in keys
+    fcl = '-cl' in keys
+
     info = ['']
     j = 0
     for role in ctx.guild.roles[::-1]:
-        nr = f'<@&{role.id}> — id:{role.id}\n'
-        # dl = 12 - len(role.name)
-        # dl = '· '*(dl if dl > 0 else 1)
-        # nr = f'<@&{role.id}> {dl}id:{role.id}\n'
+        #nr = f'<@&{role.id}> — id:{role.id}\n'
+        nr = f'<@&{role.id}> '
+        nr += f'id:{role.id} ' if fid else ''
+        nr += f'perm:{role.permissions.value} ' if fperm else ''
+        nr += f'cl:{role.colour} ' if fcl else ''
+        nr += '\n'
+
         if len(info[j]) + len(nr) < 1024:
             info[j] += nr
         else:
@@ -65,7 +67,36 @@ async def show_roles_id(ctx):
 
     n = len(info)
     for i in range(n):
-        embed = discord.Embed(title='Идентификаторы ролей', color=settings.color)
+        embed = discord.Embed(title='List of roles', color=settings.color)
+        embed.add_field(name=f'стр. {i+1} из {n}:', value=info[i], inline=False)
+        await ctx.send(embed=embed)
+
+
+@bot.command()
+async def roles(ctx, *keys):
+    fid = '-id' in keys
+    fperm = '-perm' in keys
+    fcl = '-cl' in keys
+
+    info = ['']
+    j = 0
+    for role in ctx.guild.roles[::-1]:
+        #nr = f'<@&{role.id}> — id:{role.id}\n'
+        nr = f'<@&{role.id}> '
+        nr += f'id:{role.id} ' if fid else ''
+        nr += f'perm:{role.permissions.value} ' if fperm else ''
+        nr += f'cl:{role.colour} ' if fcl else ''
+        nr += '\n'
+
+        if len(info[j]) + len(nr) < 1024:
+            info[j] += nr
+        else:
+            info.append(nr)
+            j += 1
+
+    n = len(info)
+    for i in range(n):
+        embed = discord.Embed(title='List of roles', color=settings.color)
         embed.add_field(name=f'стр. {i+1} из {n}:', value=info[i], inline=False)
         await ctx.send(embed=embed)
 
@@ -352,21 +383,120 @@ async def pal(ctx, lim:int=200):
 
 
 
-@bot.command(name='r')
+
+
+
+
+
+class _Role:
+    def __init__(self, name, permissions=0, color=0xffff00, hoist=True):
+        self.n = name
+        self.p = permissions=discord.Permissions(permissions)
+        self.c = color
+        self.h = hoist
+
+@bot.command(name='roles_setup')
 async def wevonwqv(ctx):
-    n = 'test2'
-    p = discord.Permissions(268435511)
-    c = 0xff6699
+    roles = []
+    roles.append(_Role('✦ Admin', 8589410303))
+    roles.append(_Role('✦ Moderator', 106836783095))
+    roles.append(_Role('✦ Developer', 107105210081))
+    roles.append(_Role('✦ Redactor', 105763032657))
+    roles.append(_Role('✦ Control', 103346982593))
 
+    roles.append(_Role('◆ BOT', 103183355457, 0x72ffb6))
+    roles.append(_Role('◆ BOT +', 103183404745, 0xf2ff9a))
+    roles.append(_Role('◆ Поцан ♀', 278592, 0x718ed4))
+    roles.append(_Role('◆ Девка ♂', 278592, 0xe66b8e))
 
+    desc = ''
+    for r in roles:
+        role = await ctx.guild.create_role(name=r.n, permissions=r.p, color=r.c, hoist=r.h)  
+        desc += f'<@&{role.id}>\n'
 
-
-    role = await ctx.guild.create_role(name=n, permissions=p, color=c)  
-
-    d = f'''
-    **Role:** <@&{role.id}>
-    **Id:** {role.id}
-    **Created by:** {ctx.author.mention}
-    '''
-    embed = discord.Embed(name='New role created', description=d)
+    desc += f'**Created by:** {ctx.author.mention}'
+    embed = discord.Embed(title='New roles', description=desc, color=settings.color)
     await ctx.send(embed=embed)
+
+
+
+def get_hsl_gradient(c1, c2, n):
+    gradient = []
+    for i in range(n):
+        a = i / (n - 1) # 0.0 <= alpha <= 1.0 
+        c = tuple((1-a)*c1[i] + a*c2[i] for i in range(3))
+        gradient.append(c)
+        
+    return gradient
+
+
+@bot.command()
+async def hsl_gradient(ctx, *args):
+    hc0 = '#FFFFA3'
+    hc1 = '#ffadad'
+    n = 4
+    
+    _hsl = [hex2hsl(c) for c in [hc0, hc1]]
+    _hsl = get_hsl_gradient(_hsl[0], _hsl[1], n)
+    _rgb = [tuple(round(x*255) for x in hsl2rgb(c)) for c in _hsl]
+    _hex = ['#%02x%02x%02x' % rgb for rgb in _rgb]
+    
+    _hsl = [[c[0]*360, c[1]*100, c[2]*100] for c in _hsl]
+    _hsl = [tuple(round(x, 2) for x in c) for c in _hsl]
+      
+    desc = f'From **{hc0.upper()}** to **{hc1.upper()}** in **{n}** colors'
+    embed = discord.Embed(title='HSL gradient', description=desc, color=settings.color)
+
+    for colors, name in zip([_hex, _rgb, _hsl], ['HEX', 'RGB', 'HSL']):
+        text = ''
+        for c in colors:
+            text += f'{c}\n'
+        embed.add_field(name=name, value=text, inline=True)
+    
+    await ctx.send(embed=embed)
+
+
+
+@bot.command()
+async def role_gradient(ctx, *roles):
+    hc0 = '#ffadad'
+    hc1 = '#FFFFA3'
+    
+    _hsl = [hex2hsl(c) for c in [hc0, hc1]]
+    _hsl = get_hsl_gradient(_hsl[0], _hsl[1], len(roles))
+    _rgb = [tuple(round(x*255) for x in hsl2rgb(c)) for c in _hsl]
+    _hex = [discord.Color.from_rgb(c[0], c[1], c[2]) for c in _rgb]
+      
+    for role, c in zip(roles, _hex):
+        id = int(role[3:-1])
+        re = discord.utils.get(ctx.guild.roles, id=id)
+        await re.edit(colour=c)
+        
+    
+
+
+    
+    
+    
+
+
+
+
+
+
+
+@bot.command()
+async def del_roles_after(ctx, section:int=859061690297352192):
+    for role in ctx.guild.roles:
+        if role.id > section:
+            #ctx.guild.delete_role(role)
+            await role.delete()
+
+
+
+@bot.command(name="delete_role", pass_context=True)
+async def delete_role(ctx, role_name):
+    #find role object
+    role_object = discord.utils.get(ctx.message.guild.roles, name=role_name)
+    #delete role
+    await role_object.delete()
