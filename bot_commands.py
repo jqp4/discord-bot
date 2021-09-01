@@ -342,7 +342,7 @@ async def sal(ctx):
     guild = ctx.guild
     with open(f'audit_logs_{guild.name}', 'w+') as f:
         async for entry in guild.audit_logs(limit=100):
-            f.write('{0.user} did {0.action} to {0.target}'.format(entry))
+            f.write('{0.user} did {0.action} to {0.target}\n'.format(entry))
     await ctx.send('done.')
 
 
@@ -406,8 +406,8 @@ async def wevonwqv(ctx):
 
     roles.append(_Role('◆ BOT', 103183355457, 0x72ffb6))
     roles.append(_Role('◆ BOT +', 103183404745, 0xf2ff9a))
-    roles.append(_Role('◆ Поцан ♀', 278592, 0x718ed4))
-    roles.append(_Role('◆ Девка ♂', 278592, 0xe66b8e))
+    roles.append(_Role('◆ Поцан', 278592, 0x718ed4))
+    roles.append(_Role('◆ Девка', 278592, 0xe66b8e))
 
     desc = ''
     for r in roles:
@@ -500,3 +500,45 @@ async def delete_role(ctx, role_name):
     role_object = discord.utils.get(ctx.message.guild.roles, name=role_name)
     #delete role
     await role_object.delete()
+
+
+
+
+
+
+
+
+
+@bot.command()
+async def su(ctx, user_id:int, ln:int):
+    '''user_name='bobba'
+    i = 9
+    j = 4
+    # k ?
+    n = 0
+    for k in range(10):
+        usr = f'{user_name}#{i}{j}{k}{n}'
+        #print(usr)
+
+
+    #ui = 472095685492342811
+    #client = discord.Client()
+    #print(client.get_user(ui))
+
+    user = await bot.fetch_user(user_id)
+
+    print(user)
+    print(user.avatar_url)
+    #await user.send('wqevno')'''
+
+    for ui in range(user_id - ln, user_id + ln):
+        print(f'trying get {ui}...')
+        try:
+            user = await bot.fetch_user(ui)
+            #msg = 'id: {1}\nname: {0}\navatar url: {0.avatar_url}'.format(user, ui)
+            #msg = f'id: {ui}\nname: {user}'
+            await ctx.send(f'id: {ui}\nname: {user}')
+            print(f'        {user}')
+        except: pass
+    await ctx.send('done.')
+    print('done.')

@@ -1,13 +1,3 @@
-
-settings_old = {
-    'token': 'ODU1NTU0MjM5OTkxOTA2MzM1.YM0K-g.54Oh2uTawJ85Iu5IGJQZhV6F8JE',
-    'id': 855554239991906335,
-    'prefix': '::',
-    'color': 0xff6699
-}
-
-
-
 class Config:
     def __init__(self):
         self.token = 'ODU2NTU4ODY5MzMzNjcxOTY2.YNCynA.2WGUEIkR3FBLry3n2sVAd27z3O8'
