@@ -1,11 +1,9 @@
 .vscode
 .vscode/*
-!.vscode/settings.json
 tmp
 
 
 # In order not to show the token, I will hide the main configuration file and leave an example
-!./config.py
 config.py
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,python
