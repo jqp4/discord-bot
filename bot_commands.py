@@ -101,37 +101,6 @@ async def roles(ctx, *keys):
         await ctx.send(embed=embed)
 
 
-@bot.command()
-async def d(ctx):
-    ''' Информация о ролях:
-        Админские:
-
-        @✦ Administrator — Главная администрация.
-        @✦ Moderator — Старшая модерация.
-
-        Служебные:
-
-        @✦ Developer — Обслуживание и настройка серверных ботов.
-        @✦ Curator — Лучшие представители своей ветки.
-        @✦ Control — Младшая модерация.
-        @✦ Eventsmod — Организаторы мероприятий.
-        @✦ Manager — Взаимодействие с аудиторией сервера.
-        @✦ Support — Экскурсия новичков по серверу.
-        @✦ Creative Control — Организация творческой деятельности.
-        @✦ Redactor — В ответе за #mood и #webm.'''
-
-    #admins = '@✦ Administrator — Главная администрация.\n@✦ Moderator — Старшая модерация.'
-    #admins = '{} — Главная администрация.\n — Старшая модерация.'.format(discord.role.SUS)
-    server_id = ctx.message.guild.id
-    info = f'id сервера - {server_id}.'
-
-    role_id = 856144602855112734
-    admins = f'<@&{role_id}> — Главная администрация.'
-    embed = discord.Embed(title="Информация о сервере:", color=settings.color)
-    embed.add_field(name='*Идентификаторы:*', value=info, inline=False)
-    embed.add_field(name='*Роли:*', value=admins, inline=False)
-    await ctx.send(embed=embed)
-
 
 @bot.command(aliases=["mc"])
 async def member_count(ctx):
@@ -502,43 +471,3 @@ async def delete_role(ctx, role_name):
     await role_object.delete()
 
 
-
-
-
-
-
-
-
-@bot.command()
-async def su(ctx, user_id:int, ln:int):
-    '''user_name='bobba'
-    i = 9
-    j = 4
-    # k ?
-    n = 0
-    for k in range(10):
-        usr = f'{user_name}#{i}{j}{k}{n}'
-        #print(usr)
-
-
-    #ui = 472095685492342811
-    #client = discord.Client()
-    #print(client.get_user(ui))
-
-    user = await bot.fetch_user(user_id)
-
-    print(user)
-    print(user.avatar_url)
-    #await user.send('wqevno')'''
-
-    for ui in range(user_id - ln, user_id + ln):
-        print(f'trying get {ui}...')
-        try:
-            user = await bot.fetch_user(ui)
-            #msg = 'id: {1}\nname: {0}\navatar url: {0.avatar_url}'.format(user, ui)
-            #msg = f'id: {ui}\nname: {user}'
-            await ctx.send(f'id: {ui}\nname: {user}')
-            print(f'        {user}')
-        except: pass
-    await ctx.send('done.')
-    print('done.')

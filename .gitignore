@@ -1,10 +1,14 @@
 .vscode
-.vscode/*
 tmp
-
 
 # In order not to show the token, I will hide the main configuration file and leave an example
 config.py
+
+
+
+
+
+
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,python
